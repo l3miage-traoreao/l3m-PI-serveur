@@ -24,6 +24,7 @@ public class DbConnection {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(dbUrl);
             return new HikariDataSource(config);
+            
         }
     }
 
