@@ -22,6 +22,7 @@ public class UserCRUD{
 
 	@Autowired
 	private DataSource dataSource;
+
 	
 	//Création de la ressource GET /api/users/
 	@GetMapping("/")
@@ -53,6 +54,69 @@ public class UserCRUD{
 		} 
 	}
 	
+	//Création de la ressource GET /api/users/{userID}
+	@GetMapping("/{userId}")
+	public User read(@PathVariable(value="userId") String id, HttpServletResponse response){
+	
+		try (Connection connection = dataSource.getConnection()) {
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM chamis WHERE login="+id);
+			
+			rs.next();
+			User u = new User();
+			u.login = rs.getString("login");
+			u.age = rs.getInt("age");
+			
+			return u;
+		}
+		catch (Exception e) {
+			response.setStatus(404);
+			try{
+				response.getOutputStream().print(e.getMessage());
+			}
+			catch (Exception e2) {
+				System.err.println(e2.getMessage());
+			}
+			System.err.println(e.getMessage());
+			return null;
+		} 
+	}
+	
+	
+	
+	//Création de la ressource POST /api/users/{userID}
+	@PostMapping("/{userId}")
+	public User create(@PathVariable(value="userId") String id, @RequestBody User u, HttpServletResponse response){
+	
+		try (Connection connection = dataSource.getConnection()){
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate("INSERT INTO chamis VALUES ('"+u.login+"',"+u.age+")");
+			
+			User c=read(id, response);
+			return c;
+		}
+		catch (Exception e) {
+		if(id!=u.login){
+			response.setStatus(412);
+		}
+		else{
+			response.setStatus(403);
+		}
+			try{
+				response.getOutputStream().print(e.getMessage());
+			}
+			catch (Exception e2) {
+				System.err.println(e2.getMessage());
+			}
+			System.err.println(e.getMessage());
+			return null;
+		
+		}
+	
+	}
+	
+	
+	
 	//Création de la ressource PUT /api/users/{userID}
 	@PutMapping("/{userId}")
 	public User update(@PathVariable(value="userId") String id, @RequestBody User u, HttpServletResponse response){
@@ -61,11 +125,8 @@ public class UserCRUD{
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate("UPDATE chamis SET login='"+u.login+"', age="+u.age+" WHERE login="+id);
 			
-			
-			
-			
-			
-			return u;
+			User c=read(id, response);
+			return c;
 		}
 		catch (Exception e) {
 		if(id!=u.login){
@@ -85,5 +146,32 @@ public class UserCRUD{
 		
 		} 
 	}
+	
+	//Création de la ressource DELETE /api/users/{userID}
+	@DeleteMapping("/{userId}")
+	public void delete(@PathVariable(value="userId") String id, HttpServletResponse response){
+		try (Connection connection  = dataSource.getConnection()) { 
+		   	Statement stat = connection.createStatement(); 
+			stat.executeUpdate("DELETE FROM chamis WHERE login="+id);
+		}
+		catch(Exception e){
+			response.setStatus(404);
+			try{
+				response.getOutputStream().print(e.getMessage());
+			}
+			catch (Exception e2) {
+				System.err.println(e2.getMessage());
+			}
+			System.err.println(e.getMessage());
+			
+		}
+	}
 		  
+
+
+
+
+
+
+ 
 }
