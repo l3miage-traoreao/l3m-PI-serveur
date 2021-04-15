@@ -62,7 +62,7 @@ public class UserCRUD{
 	
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM chamis WHERE login="+id);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM chamis WHERE login='"+id+"'");
 			
 			rs.next();
 			User u = new User();
@@ -129,7 +129,7 @@ public class UserCRUD{
 	
 		try (Connection connection = dataSource.getConnection()){
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("UPDATE chamis SET login='"+u.login+"', age="+u.age+" WHERE login="+id);
+			stmt.executeUpdate("UPDATE chamis SET login='"+u.login+"', age="+u.age+" WHERE login='"+id+"'");
 			
 			User c=read(id, response);
 			//stmt.close();
@@ -160,7 +160,7 @@ public class UserCRUD{
 	public void delete(@PathVariable(value="userId") String id, HttpServletResponse response){
 		try (Connection connection  = dataSource.getConnection()) { 
 		   	Statement stat = connection.createStatement(); 
-			stat.executeUpdate("DELETE FROM chamis WHERE login="+id);
+			stat.executeUpdate("DELETE FROM chamis WHERE login='"+id+"'");
 			//stat.close();
         		//connection.close();
 		}

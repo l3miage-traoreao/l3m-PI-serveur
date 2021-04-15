@@ -65,7 +65,7 @@ public class DefiCRUD{
 	
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM defis WHERE id="+id);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM defis WHERE id='"+id+"'");
 			
 			rs.next();
 			Defi d = new Defi();
@@ -135,7 +135,7 @@ public class DefiCRUD{
 	
 		try (Connection connection = dataSource.getConnection()){
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("UPDATE defis SET id='"+d.id+"', titre='"+d.titre+"',datedecreation="+d.datedecreation+",description='"+d.description+"' WHERE id="+id);
+			stmt.executeUpdate("UPDATE defis SET id='"+d.id+"', titre='"+d.titre+"',datedecreation="+d.datedecreation+",description='"+d.description+"' WHERE id='"+id+"'");
 			
 			Defi def=read(id, response);
 			//stmt.close();
@@ -167,7 +167,7 @@ public class DefiCRUD{
 	public void delete(@PathVariable(value="defiId") String id, HttpServletResponse response){
 		try (Connection connection  = dataSource.getConnection()) { 
 		   	Statement stat = connection.createStatement(); 
-			stat.executeUpdate("DELETE FROM defis WHERE id="+id);
+			stat.executeUpdate("DELETE FROM defis WHERE id='"+id+"'");
 			
 			//stat.close();
         		//connection.close();
