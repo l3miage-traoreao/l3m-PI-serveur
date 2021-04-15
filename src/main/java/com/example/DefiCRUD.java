@@ -17,27 +17,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
-@RequestMapping("/api/users")
-public class UserCRUD{
+@RequestMapping("/api/defis")
+public class DefiCRUD{
 
 	@Autowired
 	private DataSource dataSource;
-
 	
-	//Création de la ressource GET /api/users/
+	//Création de la ressource GET /api/defis/
 	@GetMapping("/")
-	public ArrayList<User> allUsers(HttpServletResponse response){
+	public ArrayList<Defi> allDefis(HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM chamis");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM defis");
 			
-			ArrayList<User> L = new ArrayList<User>();
+			ArrayList<Defi> L = new ArrayList<Defi>();
 			while (rs.next()) {
-			User u = new User();
-			u.login = rs.getString("login");
-			u.age = rs.getInt("age");
-			L.add(u);
+			Defi d = new Defi();
+			d.id = rs.getString("id");
+			d.titre = rs.getString("titre");
+			d.datedecreation = rs.getTimestamp("datedecreation");
+			d.description = rs.getString("description");
+			L.add(d);
 			}
 			stmt.close();
         		connection.close();
@@ -56,22 +57,26 @@ public class UserCRUD{
 		} 
 	}
 	
-	//Création de la ressource GET /api/users/{userID}
-	@GetMapping("/{userId}")
-	public User read(@PathVariable(value="userId") String id, HttpServletResponse response){
+	
+	
+	//Création de la ressource GET /api/defis/{defiID}
+	@GetMapping("/{defiId}")
+	public Defi read(@PathVariable(value="defiId") String id, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM chamis WHERE login="+id);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM defis WHERE id="+id);
 			
 			rs.next();
-			User u = new User();
-			u.login = rs.getString("login");
-			u.age = rs.getInt("age");
+			Defi d = new Defi();
+			d.id = rs.getString("id");
+			d.titre = rs.getString("titre");
+			d.datedecreation = rs.getTimestamp("datedecreation");
+			d.description = rs.getString("description");
 			
 			//stmt.close();
         		//connection.close();
-			return u;
+			return d;
 		}
 		catch (Exception e) {
 			response.setStatus(404);
@@ -87,22 +92,21 @@ public class UserCRUD{
 	}
 	
 	
-	
-	//Création de la ressource POST /api/users/{userID}
-	@PostMapping("/{userId}")
-	public User create(@PathVariable(value="userId") String id, @RequestBody User u, HttpServletResponse response){
+	//Création de la ressource POST /api/defis/{defiID}
+	@PostMapping("/{defiId}")
+	public Defi create(@PathVariable(value="defiId") String id, @RequestBody Defi d, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("INSERT INTO chamis VALUES ('"+u.login+"',"+u.age+")");
+			stmt.executeUpdate("INSERT INTO defis VALUES ('"+d.id+"','"+d.titre+"',"+d.datedecreation+",'"+d.description+"')");
 			
-			User c=read(id, response);
+			Defi def=read(id, response);
 			//stmt.close();
         		//connection.close();
-			return c;
+			return def;
 		}
 		catch (Exception e) {
-		if(id!=u.login){
+		if(id!=d.id){
 			response.setStatus(412);
 		}
 		else{
@@ -123,21 +127,23 @@ public class UserCRUD{
 	
 	
 	
-	//Création de la ressource PUT /api/users/{userID}
-	@PutMapping("/{userId}")
-	public User update(@PathVariable(value="userId") String id, @RequestBody User u, HttpServletResponse response){
+	
+	
+	//Création de la ressource PUT /api/defis/{defiID}
+	@PutMapping("/{defiId}")
+	public Defi update(@PathVariable(value="defiId") String id, @RequestBody Defi d, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("UPDATE chamis SET login='"+u.login+"', age="+u.age+" WHERE login="+id);
+			stmt.executeUpdate("UPDATE defis SET id='"+d.id+"', titre='"+d.titre+"',datedecreation="+d.datedecreation+",description='"+d.description+"' WHERE id="+id);
 			
-			User c=read(id, response);
+			Defi def=read(id, response);
 			//stmt.close();
         		//connection.close();
-			return c;
+			return def;
 		}
 		catch (Exception e) {
-		if(id!=u.login){
+		if(id!=d.id){
 			response.setStatus(412);
 		}
 		else{
@@ -155,12 +161,14 @@ public class UserCRUD{
 		} 
 	}
 	
-	//Création de la ressource DELETE /api/users/{userID}
-	@DeleteMapping("/{userId}")
-	public void delete(@PathVariable(value="userId") String id, HttpServletResponse response){
+	
+	//Création de la ressource DELETE /api/defis/{defiID}
+	@DeleteMapping("/{defiId}")
+	public void delete(@PathVariable(value="defiId") String id, HttpServletResponse response){
 		try (Connection connection  = dataSource.getConnection()) { 
 		   	Statement stat = connection.createStatement(); 
-			stat.executeUpdate("DELETE FROM chamis WHERE login="+id);
+			stat.executeUpdate("DELETE FROM defis WHERE id="+id);
+			
 			//stat.close();
         		//connection.close();
 		}
@@ -176,12 +184,5 @@ public class UserCRUD{
 			
 		}
 	}
-		  
-
-
-
-
-
-
- 
+	
 }
