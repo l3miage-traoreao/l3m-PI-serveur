@@ -38,6 +38,11 @@ public class DefiCRUD{
 			d.titre = rs.getString("titre");
 			d.datedecreation = rs.getTimestamp("datedecreation");
 			d.description = rs.getString("description");
+			d.datedemodification = rs.getTimestamp("datedemodification");
+			d.type = rs.getString("type");
+			d.auteur = rs.getString("auteur");
+			d.arret = rs.getString("arret");
+			d.codearret = rs.getString("codearret");
 			L.add(d);
 			}
 			stmt.close();
@@ -73,6 +78,10 @@ public class DefiCRUD{
 			d.titre = rs.getString("titre");
 			d.datedecreation = rs.getTimestamp("datedecreation");
 			d.description = rs.getString("description");
+			d.datedemodification = rs.getTimestamp("datedemodification");
+			d.type = rs.getString("type");
+			d.arret = rs.getString("arret");
+			d.codearret = rs.getString("codearret");
 			
 			//stmt.close();
         		//connection.close();
@@ -98,7 +107,7 @@ public class DefiCRUD{
 	
 		try (Connection connection = dataSource.getConnection()){
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("INSERT INTO defis VALUES ('"+d.id+"','"+d.titre+"',"+d.datedecreation+",'"+d.description+"')");
+			stmt.executeUpdate("INSERT INTO defis VALUES ('"+d.id+"','"+d.titre+"',"+d.datedecreation+",'"+d.description+"',"+d.datedemodification+",'"+d.type+"','"+d.auteur+"','"+d.arret+"','"+d.codearret+"')");
 			
 			Defi def=read(id, response);
 			//stmt.close();
