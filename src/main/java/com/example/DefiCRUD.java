@@ -43,6 +43,12 @@ public class DefiCRUD{
 			d.auteur = rs.getString("auteur");
 			d.arret = rs.getString("arret");
 			d.codearret = rs.getString("codearret");
+			d.motscles = rs.getString("motscles");
+			d.duree = rs.getString("duree");
+			d.prologue = rs.getString("prologue");
+			d.points=rs.getInt("points");
+			d.epilogue = rs.getString("epilogue");
+			d.commentaires = rs.getString("commentaires");
 			L.add(d);
 			}
 			stmt.close();
@@ -82,6 +88,12 @@ public class DefiCRUD{
 			d.type = rs.getString("type");
 			d.arret = rs.getString("arret");
 			d.codearret = rs.getString("codearret");
+			d.motscles = rs.getString("motscles");
+			d.duree = rs.getString("duree");
+			d.prologue = rs.getString("prologue");
+			d.points=rs.getInt("points");
+			d.epilogue = rs.getString("epilogue");
+			d.commentaires = rs.getString("commentaires");
 			
 			//stmt.close();
         		//connection.close();
@@ -107,7 +119,7 @@ public class DefiCRUD{
 	
 		try (Connection connection = dataSource.getConnection()){
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("INSERT INTO defis VALUES ('"+d.id+"','"+d.titre+"',"+d.datedecreation+",'"+d.description+"',"+d.datedemodification+",'"+d.type+"','"+d.auteur+"','"+d.arret+"','"+d.codearret+"')");
+			stmt.executeUpdate("INSERT INTO defis(id,titre,datedecreation,description,datedemodification,type,auteur,arret,codearret,motscles,duree,prologue,points,epilogue,commentaires) VALUES ('"+d.id+"','"+d.titre+"',"+d.datedecreation+",'"+d.description+"',"+d.datedemodification+",'"+d.type+"','"+d.auteur+"','"+d.arret+"','"+d.codearret+"','"+d.motscles+"','"+d.duree+"','"+d.prologue+"',"+d.points+",'"+d.epilogue+"','"+d.commentaires+"')");
 			
 			Defi def=read(id, response);
 			//stmt.close();
@@ -144,7 +156,7 @@ public class DefiCRUD{
 	
 		try (Connection connection = dataSource.getConnection()){
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("UPDATE defis SET id='"+d.id+"', titre='"+d.titre+"',datedecreation="+d.datedecreation+",description='"+d.description+"' WHERE id='"+id+"'");
+			stmt.executeUpdate("UPDATE defis SET id='"+d.id+"', titre='"+d.titre+"',datedecreation="+d.datedecreation+",description='"+d.description+"',datedemodification="+d.datedemodification+",type='"+d.type+"',auteur='"+d.auteur+"',arret='"+d.arret+"',codearret='"+d.codearret+"',motscles='"+d.motscles+"',duree='"+d.duree+"',prologue='"+d.prologue+"',points="+d.points+",epilogue='"+d.epilogue+"',commentaires='"+d.commentaires+" WHERE id='"+id+"'");
 			
 			Defi def=read(id, response);
 			//stmt.close();
