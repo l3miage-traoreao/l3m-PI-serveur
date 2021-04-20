@@ -1,7 +1,5 @@
 package com.example;
-import java.sql.Connection; 
-import java.sql.ResultSet; 
-import java.sql.Statement; 
+import java.sql.*; 
 import java.util.ArrayList; 
 import javax.servlet.http.HttpServletResponse; 
 import javax.sql.DataSource; 
@@ -118,10 +116,27 @@ public class DefiCRUD{
 	public Defi create(@PathVariable(value="defiId") String id, @RequestBody Defi d, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("INSERT INTO defis(id,titre,datedecreation,description,datedemodification,type,auteur,arret,codearret,motscles,duree,prologue,points,epilogue,commentaires) VALUES ('"+d.id+"','"+d.titre+"',"+d.datedecreation+",'"+d.description+"',"+d.datedemodification+",'"+d.type+"','"+d.auteur+"','"+d.arret+"','"+d.codearret+"','"+d.motscles+"','"+d.duree+"','"+d.prologue+"',"+d.points+",'"+d.epilogue+"','"+d.commentaires+"')");
+			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO defis(id,titre,datedecreation,description,datedemodification,type,auteur,arret,codearret,motscles,duree,prologue,points,epilogue,commentaires) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			stmt.setString(1, d.id);
+			stmt.setString(2, d.titre);
+			stmt.setTimestamp(3, d.datedecreation);
+			stmt.setString(4, d.description);
+			stmt.setTimestamp(5, d.datedemodification);
+			stmt.setString(6, d.type);
+			stmt.setString(7, d.auteur);
+			stmt.setString(8, d.arret);
+			stmt.setString(9, d.codearret);
+			stmt.setString(10, d.motscles);
+			stmt.setString(11, d.duree);
+			stmt.setString(12, d.prologue);
+			stmt.setInt(13, d.points);
+			stmt.setString(14, d.epilogue);
+			stmt.setString(15, d.commentaires);
 			
-			Defi def=read(id, response);
+			stmt.execute();
+		
+			
+			Defi def=read(d.id, response);
 			//stmt.close();
         		//connection.close();
 			return def;
@@ -155,10 +170,29 @@ public class DefiCRUD{
 	public Defi update(@PathVariable(value="defiId") String id, @RequestBody Defi d, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate("UPDATE defis SET id='"+d.id+"', titre='"+d.titre+"',datedecreation="+d.datedecreation+",description='"+d.description+"',datedemodification="+d.datedemodification+",type='"+d.type+"',auteur='"+d.auteur+"',arret='"+d.arret+"',codearret='"+d.codearret+"',motscles='"+d.motscles+"',duree='"+d.duree+"',prologue='"+d.prologue+"',points="+d.points+",epilogue='"+d.epilogue+"',commentaires='"+d.commentaires+" WHERE id='"+id+"'");
+			PreparedStatement stmt = connection.prepareStatement ("UPDATE defis SET id=?, titre=?, datedecreation=?, description=?, datedemodification=?, type=?, auteur=?, arret=?, codearret=?, motscles=?, duree=?, prologue=?, points=?, epilogue=?, commentaires=? WHERE id=?");
+			stmt.setString(1, d.id);
+			stmt.setString(2, d.titre);
+			stmt.setTimestamp(3, d.datedecreation);
+			stmt.setString(4, d.description);
+			stmt.setTimestamp(5, d.datedemodification);
+			stmt.setString(6, d.type);
+			stmt.setString(7, d.auteur);
+			stmt.setString(8, d.arret);
+			stmt.setString(9, d.codearret);
+			stmt.setString(10, d.motscles);
+			stmt.setString(11, d.duree);
+			stmt.setString(12, d.prologue);
+			stmt.setInt(13, d.points);
+			stmt.setString(14, d.epilogue);
+			stmt.setString(15, d.commentaires);
+			stmt.setString(16, id);
 			
-			Defi def=read(id, response);
+			stmt.execute();
+		
+			
+			
+			Defi def=read(d.id, response);
 			//stmt.close();
         		//connection.close();
 			return def;

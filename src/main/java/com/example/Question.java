@@ -6,7 +6,7 @@ public class Question {
 	public String id;
 	public int label;
 	public String description;
-	public String secret;
+	public String secrets;
 	public int points;
 	
 	

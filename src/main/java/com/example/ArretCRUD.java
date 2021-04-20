@@ -15,28 +15,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
-@RequestMapping("/api/users")
-public class UserCRUD{
+@RequestMapping("/api/arrets")
+public class ArretCRUD{
 
 	@Autowired
 	private DataSource dataSource;
 
 	
-	//Création de la ressource GET /api/users/
+	//Création de la ressource GET /api/Arrets/
 	@GetMapping("/")
-	public ArrayList<User> allUsers(HttpServletResponse response){
+	public ArrayList<Arret> allArrets(HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM chamis");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM arrets");
 			
-			ArrayList<User> L = new ArrayList<User>();
+			ArrayList<Arret> L = new ArrayList<Arret>();
 			while (rs.next()) {
-			User u = new User();
-			u.login = rs.getString("login");
-			u.age = rs.getInt("age");
-			u.ville = rs.getString("ville");
-			u.description = rs.getString("description");
+			Arret u = new Arret();
+			u.arret = rs.getString("arret");
+			u.codearret = rs.getString("codearret");
+			u.streetmap = rs.getString("streetmap");
+			
 			L.add(u);
 			}
 			stmt.close();
@@ -56,20 +56,19 @@ public class UserCRUD{
 		} 
 	}
 	
-	//Création de la ressource GET /api/users/{userID}
-	@GetMapping("/{userId}")
-	public User read(@PathVariable(value="userId") String id, HttpServletResponse response){
+	//Création de la ressource GET /api/Arrets/{ArretID}
+	@GetMapping("/{ArretId}")
+	public Arret read(@PathVariable(value="ArretId") String id, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM chamis WHERE login='"+id+"'");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM arrets WHERE codearret='"+id+"'");
 			
 			rs.next();
-			User u = new User();
-			u.login = rs.getString("login");
-			u.age = rs.getInt("age");
-			u.ville = rs.getString("ville");
-			u.description = rs.getString("description");
+			Arret u = new Arret();
+			u.arret = rs.getString("arret");
+			u.codearret = rs.getString("codearret");
+			u.streetmap = rs.getString("streetmap");
 			
 			//stmt.close();
         		//connection.close();
@@ -90,29 +89,28 @@ public class UserCRUD{
 	
 	
 	
-	//Création de la ressource POST /api/users/{userID}
-	@PostMapping("/{userId}")
-	public User create(@PathVariable(value="userId") String id, @RequestBody User u, HttpServletResponse response){
+	//Création de la ressource POST /api/Arrets/{ArretID}
+	@PostMapping("/{ArretId}")
+	public Arret create(@PathVariable(value="ArretId") String id, @RequestBody Arret u, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
 		
-			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO chamis VALUES (?,?,?,?)");
-			stmt.setString(1, u.login);
-			stmt.setInt(2, u.age);
-			stmt.setString(3, u.ville);
-			stmt.setString(4, u.description);
+			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO arrets VALUES (?,?,?)");
+			stmt.setString(1, u.arret);
+			stmt.setString(2, u.codearret);
+			stmt.setString(3, u.streetmap);
 			
 			
 			
 			stmt.execute();
 			
-			User c=read(u.login, response);
+			Arret c=read(u.codearret, response);
 			//stmt.close();
         		//connection.close();
 			return c;
 		}
 		catch (Exception e) {
-		if(id!=u.login){
+		if(id!=u.codearret){
 			response.setStatus(412);
 		}
 		else{
@@ -133,28 +131,27 @@ public class UserCRUD{
 	
 	
 	
-	//Création de la ressource PUT /api/users/{userID}
-	@PutMapping("/{userId}")
-	public User update(@PathVariable(value="userId") String id, @RequestBody User u, HttpServletResponse response){
+	//Création de la ressource PUT /api/Arrets/{ArretID}
+	@PutMapping("/{ArretId}")
+	public Arret update(@PathVariable(value="ArretId") String id, @RequestBody Arret u, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
 		
-			PreparedStatement stmt = connection.prepareStatement ("UPDATE chamis SET login=?, age=?,ville=?,description=? WHERE login=?");
-			stmt.setString(1, u.login);
-			stmt.setInt(2, u.age);
-			stmt.setString(3, u.ville);
-			stmt.setString(4, u.description);
-			stmt.setString(5, id);
+			PreparedStatement stmt = connection.prepareStatement ("UPDATE arrets SET arret=?, codearret=?,streetmap=? WHERE codearret=?");
+			stmt.setString(1, u.arret);
+			stmt.setString(2, u.codearret);
+			stmt.setString(3, u.streetmap);
+			stmt.setString(4, id);
 			
 			stmt.execute();
 			
-			User c=read(u.login, response);
+			Arret c=read(u.codearret, response);
 			//stmt.close();
         		//connection.close();
 			return c;
 		}
 		catch (Exception e) {
-		if(id!=u.login){
+		if(id!=u.codearret){
 			response.setStatus(412);
 		}
 		else{
@@ -172,12 +169,12 @@ public class UserCRUD{
 		} 
 	}
 	
-	//Création de la ressource DELETE /api/users/{userID}
-	@DeleteMapping("/{userId}")
-	public void delete(@PathVariable(value="userId") String id, HttpServletResponse response){
+	//Création de la ressource DELETE /api/Arrets/{ArretID}
+	@DeleteMapping("/{ArretId}")
+	public void delete(@PathVariable(value="ArretId") String id, HttpServletResponse response){
 		try (Connection connection  = dataSource.getConnection()) { 
 		   	Statement stat = connection.createStatement(); 
-			stat.executeUpdate("DELETE FROM chamis WHERE login='"+id+"'");
+			stat.executeUpdate("DELETE FROM arrets WHERE codearret='"+id+"'");
 			//stat.close();
         		//connection.close();
 		}
