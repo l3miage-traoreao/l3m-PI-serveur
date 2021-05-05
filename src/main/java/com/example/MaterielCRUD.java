@@ -36,6 +36,7 @@ public class MaterielCRUD{
 		    m.label = rs.getInt("label");
 			m.description = rs.getString("description");
 			m.ressource = rs.getString("ressource");
+			m.type = rs.getString("type");
 			L.add(m);
 			}
 			stmt.close();
@@ -71,6 +72,7 @@ public class MaterielCRUD{
 			m.label = rs.getInt("label");
 			m.description = rs.getString("description");
 			m.ressource = rs.getString("ressource");
+			m.type = rs.getString("type");
 			
 			//stmt.close();
         		//connection.close();
@@ -106,6 +108,7 @@ public class MaterielCRUD{
 			m.label = rs.getInt("label");
 			m.description = rs.getString("description");
 			m.ressource = rs.getString("ressource");
+			m.type = rs.getString("type");
 			
 			L.add(m);
 			}
@@ -134,11 +137,12 @@ public class MaterielCRUD{
 	public Materiel create(@PathVariable(value="materielId") String id, @RequestBody Materiel m, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
-			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO materiels(id,label,description,ressource) VALUES (?,?,?,?)");
+			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO materiels(id,label,description,ressource,type) VALUES (?,?,?,?,?)");
 			stmt.setString(1, m.id);
 			stmt.setInt(2, m.label);
 			stmt.setString(3, m.description);
 			stmt.setString(4, m.ressource);
+			stmt.setString(5, m.type);
 			
 			stmt.execute();
 			
@@ -178,13 +182,14 @@ public class MaterielCRUD{
 		try (Connection connection = dataSource.getConnection()){
 			
 			
-			PreparedStatement stmt = connection.prepareStatement ("UPDATE materiels SET id=?, label=?,description=?,ressource=? WHERE id=? AND label=?");
+			PreparedStatement stmt = connection.prepareStatement ("UPDATE materiels SET id=?, label=?,description=?,ressource=?,type=? WHERE id=? AND label=?");
 			stmt.setString(1, m.id);
 			stmt.setInt(2, m.label);
 			stmt.setString(3, m.description);
 			stmt.setString(4, m.ressource);
-			stmt.setString(5, iddef);
-			stmt.setInt(6, id);
+			stmt.setString(5, m.type);
+			stmt.setString(6, iddef);
+			stmt.setInt(7, id);
 			
 			stmt.execute();
 			

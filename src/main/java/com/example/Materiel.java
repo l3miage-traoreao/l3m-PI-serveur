@@ -7,5 +7,5 @@ public class Materiel {
 	public int label;
 	public String description;
 	public String ressource;
-	
+	public String type;
 }
