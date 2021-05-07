@@ -47,6 +47,7 @@ public class DefiCRUD{
 			d.points=rs.getInt("points");
 			d.epilogue = rs.getString("epilogue");
 			d.commentaires = rs.getString("commentaires");
+			d.distanciel = rs.getString("distanciel");
 			L.add(d);
 			}
 			stmt.close();
@@ -92,6 +93,7 @@ public class DefiCRUD{
 			d.points=rs.getInt("points");
 			d.epilogue = rs.getString("epilogue");
 			d.commentaires = rs.getString("commentaires");
+			d.distanciel = rs.getString("distanciel");
 			
 			//stmt.close();
         		//connection.close();
@@ -132,6 +134,7 @@ public class DefiCRUD{
 			stmt.setInt(13, d.points);
 			stmt.setString(14, d.epilogue);
 			stmt.setString(15, d.commentaires);
+			stmt.setString(16, d.distanciel);
 			
 			stmt.execute();
 		
@@ -170,7 +173,7 @@ public class DefiCRUD{
 	public Defi update(@PathVariable(value="defiId") String id, @RequestBody Defi d, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
-			PreparedStatement stmt = connection.prepareStatement ("UPDATE defis SET id=?, titre=?, datedecreation=?, description=?, datedemodification=?, type=?, auteur=?, arret=?, codearret=?, motscles=?, duree=?, prologue=?, points=?, epilogue=?, commentaires=? WHERE id=?");
+			PreparedStatement stmt = connection.prepareStatement ("UPDATE defis SET id=?, titre=?, datedecreation=?, description=?, datedemodification=?, type=?, auteur=?, arret=?, codearret=?, motscles=?, duree=?, prologue=?, points=?, epilogue=?, commentaires=?, distanciel=? WHERE id=?");
 			stmt.setString(1, d.id);
 			stmt.setString(2, d.titre);
 			stmt.setTimestamp(3, d.datedecreation);
@@ -186,7 +189,8 @@ public class DefiCRUD{
 			stmt.setInt(13, d.points);
 			stmt.setString(14, d.epilogue);
 			stmt.setString(15, d.commentaires);
-			stmt.setString(16, id);
+			stmt.setString(16, d.distanciel);
+			stmt.setString(17, id);
 			
 			stmt.execute();
 		

@@ -17,4 +17,5 @@ public class Defi {
     public int points;
     public String epilogue;
     public String commentaires;
+    public String distanciel;
 }
