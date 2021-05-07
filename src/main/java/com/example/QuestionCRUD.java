@@ -37,6 +37,7 @@ public class QuestionCRUD{
 			m.description = rs.getString("description");
 			m.secrets = rs.getString("secrets");
 			m.points = rs.getInt("points");
+			m.type = rs.getString("type");
 			L.add(m);
 			}
 			stmt.close();
@@ -73,6 +74,7 @@ public class QuestionCRUD{
 			m.description = rs.getString("description");
 			m.secrets = rs.getString("secrets");
 			m.points = rs.getInt("points");
+			m.type = rs.getString("type");
 			
 			//stmt.close();
         		//connection.close();
@@ -109,6 +111,7 @@ public class QuestionCRUD{
 			m.description = rs.getString("description");
 			m.secrets = rs.getString("secrets");
 			m.points = rs.getInt("points");
+			m.type = rs.getString("type");
 			
 			L.add(m);
 			}
@@ -137,12 +140,13 @@ public class QuestionCRUD{
 	public Question create(@PathVariable(value="QuestionId") String id, @RequestBody Question m, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
-			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO questions(id,label,description,secrets,points) VALUES (?,?,?,?,?)");
+			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO questions(id,label,description,secrets,points,type) VALUES (?,?,?,?,?,?)");
 			stmt.setString(1, m.id);
 			stmt.setInt(2, m.label);
 			stmt.setString(3, m.description);
 			stmt.setString(4, m.secrets);
 			stmt.setInt(5, m.points);
+			stmt.setString(6, m.type);
 			
 			stmt.execute();
 			
@@ -182,14 +186,15 @@ public class QuestionCRUD{
 		try (Connection connection = dataSource.getConnection()){
 			
 			
-			PreparedStatement stmt = connection.prepareStatement ("UPDATE Questions SET id=?, label=?,description=?,secrets=?, points=? WHERE id=? AND label=?");
+			PreparedStatement stmt = connection.prepareStatement ("UPDATE Questions SET id=?, label=?,description=?,secrets=?, points=?, type=? WHERE id=? AND label=?");
 			stmt.setString(1, m.id);
 			stmt.setInt(2, m.label);
 			stmt.setString(3, m.description);
 			stmt.setString(4, m.secrets);
 			stmt.setInt(5, m.points);
-			stmt.setString(6, iddef);
-			stmt.setInt(7, id);
+			stmt.setString(6, m.type);
+			stmt.setString(7, iddef);
+			stmt.setInt(8, id);
 			
 			stmt.execute();
 			

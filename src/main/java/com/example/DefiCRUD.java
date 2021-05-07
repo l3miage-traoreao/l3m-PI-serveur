@@ -118,7 +118,7 @@ public class DefiCRUD{
 	public Defi create(@PathVariable(value="defiId") String id, @RequestBody Defi d, HttpServletResponse response){
 	
 		try (Connection connection = dataSource.getConnection()){
-			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO defis(id,titre,datedecreation,description,datedemodification,type,auteur,arret,codearret,motscles,duree,prologue,points,epilogue,commentaires) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement stmt = connection.prepareStatement ("INSERT INTO defis(id,titre,datedecreation,description,datedemodification,type,auteur,arret,codearret,motscles,duree,prologue,points,epilogue,commentaires,distanciel) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			stmt.setString(1, d.id);
 			stmt.setString(2, d.titre);
 			stmt.setTimestamp(3, d.datedecreation);

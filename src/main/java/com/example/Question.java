@@ -8,6 +8,7 @@ public class Question {
 	public String description;
 	public String secrets;
 	public int points;
+	public String type;
 	
 	
 }
